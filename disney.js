@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const db = require('/firebaseConfig')
+const db = require('./firebaseConfig')
 const { collection, doc, setDoc } = require('firebase/firestore');
 
 (async () => {
@@ -11,4 +11,21 @@ const { collection, doc, setDoc } = require('firebase/firestore');
     console.log('Scraped Data:', data);
 
     await browser.close();
+
+    // Function to save data
+    async function saveData() {
+        const docRef = doc(db, "users", "user123"); // Reference to 'users/user123'
+        
+        await setDoc(docRef, {
+            name: "John Doe",
+            age: 30,
+            city: "Los Angeles",
+            header: data
+        });
+
+        console.log("Document saved successfully!");
+    }
+
+    // Run function
+    saveData();
 })();

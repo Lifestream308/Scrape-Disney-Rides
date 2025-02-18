@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+const { initializeApp } = require('firebase/app');
 const { getFirestore } = require('firebase/firestore'); 
 const dotenv = require('dotenv').config();
 // TODO: Add SDKs for Firebase products that you want to use
