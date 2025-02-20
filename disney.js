@@ -10,11 +10,18 @@ const { collection, doc, setDoc } = require('firebase/firestore');
     const data = await page.evaluate(() => document.querySelector('h1')?.innerText);
     console.log('Scraped Data:', data);
 
+    // const tableCount = await page.$$eval('table', tables => tables.length);
+    const tableData1 = await page.$$eval('table tbody tr td:nth-child(1)', tdArray => tdArray.map(td => td.innerText))
+    const tableData2 = await page.$$eval('table tbody tr td:nth-child(2)', tdArray => tdArray.map(td => td.innerText))
+    // console.log('test:', tableData2);
+
+    const scrapedObject = Object.fromEntries(tableData1.map((tableData, index) => [tableData, tableData2[index]]));
+    console.log(scrapedObject)
+
     await browser.close();
 
-    // Function to save data
     async function saveData() {
-        const docRef = doc(db, "users", "user123"); // Reference to 'users/user123'
+        const docRef = doc(db, "waitTimes", "user123");
         
         await setDoc(docRef, {
             name: "John Doe",
@@ -26,6 +33,5 @@ const { collection, doc, setDoc } = require('firebase/firestore');
         console.log("Document saved successfully!");
     }
 
-    // Run function
-    saveData();
+    // saveData();
 })();
