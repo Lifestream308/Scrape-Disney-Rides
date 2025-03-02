@@ -16,22 +16,25 @@ const { collection, doc, setDoc } = require('firebase/firestore');
     // console.log('test:', tableData2);
 
     const scrapedObject = Object.fromEntries(tableData1.map((tableData, index) => [tableData, tableData2[index]]));
-    console.log(scrapedObject)
+    // console.log(scrapedObject)
 
     await browser.close();
 
     async function saveData() {
-        const docRef = doc(db, "waitTimes", "user123");
+
+        const date = new Date();
+        const todaysDate = String(date.toISOString().split("T")[0])
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const currentTime = `${hours}${minutes}`;
+        const docRef = doc(db, "waitTimes", todaysDate);
         
         await setDoc(docRef, {
-            name: "John Doe",
-            age: 30,
-            city: "Los Angeles",
-            header: data
-        });
+            [currentTime]: scrapedObject
+        }, {merge: true});
 
         console.log("Document saved successfully!");
     }
 
-    // saveData();
+    saveData();
 })();
